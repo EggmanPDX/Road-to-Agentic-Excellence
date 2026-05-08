@@ -195,3 +195,83 @@ ARCHITECT reads first, in order:
 4. `BGC-ODIN` repo state via `gh repo view EggmanPDX/BGC-ODIN`
 
 ---
+
+## Session 3 — 2026-05-08
+
+**ARCHITECT's stated goal:** ODIN audit. Resolve three Session 2 prerequisites (skills approach, Notion category, ODIN identity), then run a full file-tree audit of `BGC-ODIN`. Refine the Last 20% list with verified state. No PLAID this session — surface major decisions for Gregg, defer authoring to Session 4.
+
+**North Star connection:** ODIN is the highest-credibility Software 3.0 build — the expert-builder narrative anchor. Triage was provisional in Session 1; this session replaces guesses with verified state, which changes sequencing.
+
+### What We Did
+
+- Logged three resolutions as Decisions 009 (skills pasted on demand), 010 (Notion category = Personal Projects), 011 (ODIN identity = "The ID Killer," not regression testing).
+- Fixed `~/Developer/CLAUDE.md` ODIN row — changed "Pipeline regression testing for 6-agent system" → "The ID Killer — 6-agent performance consulting pipeline."
+- Cloned `BGC-ODIN` already present at `~/Developer/BGC:ODIN` (cloned 2026-05-06).
+- Read full repo state: README, CLAUDE.md, SESSION_STATE.md, SESSION_SUMMARY.md, state.md, package.json. Toured `odin-app/` directory tree.
+- Discovered ODIN is significantly more advanced than Session 1 estimated: working Next.js 16 + React 19 app, SQLite DB with active run history, full pipeline orchestration code, agents 1-2 live-validated against Gemini, mock tests 8/8 passing, web UI scaffolded with 3 pages + 4 API routes, 7 substantial agent prompts (17–56 KB each), shadcn/ui component set, Vitest test harness.
+- Updated triage scores: closeness 3 → 4, marketing value 4 → 5, priority 7 → 9. ODIN now leads the priority queue.
+- Surfaced AI provider decision (Decision 012). Gregg picked Claude with schema refactor — rejecting both Gemini paid tier and the hybrid path.
+- Logged Decision 012 with action items for Session 5.
+- Rewrote ODIN's section in `priority-builds.md`: verified state, blockers, revised session estimates, restructured Last 20% across Sessions 4–8.
+
+### What We Built / Decided / Published
+
+- [x] Decisions 009, 010, 011, 012 logged
+- [x] `~/Developer/CLAUDE.md` ODIN row corrected
+- [x] `priority-builds.md` ODIN section fully rewritten with verified state
+- [x] Sequencing call revised: ODIN now leads (P=9), Sensor second (P=7)
+- [x] AMPLIFIER narrative direction implied: "Software 3.0 on Claude, end to end" (unified stack)
+- [ ] ODIN PLAID artifacts — explicitly **deferred to Session 4** to avoid scope creep
+- [ ] Notion BGC Tasks DB seeding — also deferred to Session 4 (Sensor + ODIN sprint tasks together)
+
+### What Didn't Work
+
+- **Session 1 triage undersold ODIN's state by a full level.** The kickoff brief said "6-agent pipeline, partially built." The actual repo has a live-tested orchestration layer, working web UI scaffold, real SQLite-backed run history, and 8 passing tests. Lesson: do `gh` repo audit before triage, even when the kickoff is detailed. Repo state is the only source of truth.
+- **ODIN README is wrong.** Says "regression testing suite for the D8TAOPS 6-agent LangGraph system" — but the actual project is a standalone performance-consulting pipeline that happens to USE D8TAOPS-shaped methodology. The README is a stub from an earlier-life iteration. Will be replaced in Session 7 (cleanup phase).
+- **Heavy `.docx` build artifacts at repo root** (~16 MB across 23 files). These need archival to gdogsjunk Drive before public flip. Listed as Session 7 task.
+- **`state.md` and `SESSION_STATE.md` and `SESSION_SUMMARY.md` are duplicate/competing state files.** Decide on one canonical state file in Session 4 — recommend `state.md` since it follows the BRAIN convention from `~/Developer/CLAUDE.md`.
+
+### Open Loops
+
+1. **Schema refactor scope** — Decision 012 says ~30–45 min per state.md note. Verify before Session 5 by reading `odin-app/src/lib/agents/output-schemas.ts` to count `propertyNames` occurrences. If significantly larger, re-scope.
+2. **Reference scenario for public demo** — 4 scenarios exist in `src/lib/scenarios/scenarios.json`. Need to pick one for the launch demo (KCU off-limits per CLAUDE.md). Surface to Gregg in Session 6.
+3. **State file consolidation** — `state.md`, `SESSION_STATE.md`, `SESSION_SUMMARY.md` are competing canonical state files. Pick one in Session 4.
+4. **Notion seeding** — Sensor sprint-1 tasks AND ODIN sprint-4-through-8 tasks both need to land in BGC Tasks DB under "Personal Projects" category (Decision 010). Batch in Session 4.
+5. **AMPLIFIER sequencing implication** — If ODIN ships first and Sensor second, AMPLIFIER's launch narrative needs to lead with ODIN. Update `BGC-Sensor/docs/gtm.md` Pre-launch Playbook in Session 4 to reflect: "Sensor is published as second story, ODIN as first." Or: keep both tracks parallel and let whichever ships first lead. Surface to Gregg.
+
+### Curriculum Note
+
+**The audit-before-triage discipline is non-negotiable for inherited code.**
+
+Session 1's MAPPER triage scored ODIN at closeness 3 / marketing value 4 / priority 7. The Session 3 audit corrected to closeness 4 / marketing 5 / priority 9 — a one-tier underestimate that flipped sequencing. Sensor was about to lead the build sprint; ODIN actually does.
+
+The lesson is sharper than "do your homework." It's: **for any inherited or partially-built project, reading the README is not auditing. The README is what the founder *wishes* the repo were. The audit is what the repo IS.**
+
+When this gets taught: **"The README is fiction. The audit is non-fiction."**
+
+What ARCHITECT should do at every triage:
+1. Read the README (5 min)
+2. Read the actual repo tree, package.json, key source files (20 min)
+3. Note where the README and the repo disagree
+4. Score based on the repo, not the README
+
+In ODIN's case, the README was actively misleading (calling it "regression testing"). In a different project, it might be accurate but underselling. Either way, the audit is the truth.
+
+### Next Session Setup
+
+**Session 4 plan:**
+1. Resolve open loops 3 (state file consolidation), 5 (AMPLIFIER sequencing) — quick decisions.
+2. Run retroactive PLAID on ODIN. Output: `~/Developer/BGC:ODIN/vision.json` + 4 docs (`docs/product-vision.md`, `docs/prd.md`, `docs/product-roadmap.md`, `docs/gtm.md`). Significant difference from Sensor PLAID: ODIN has a working scaffold to back-fill from, not a kickoff brief to extrapolate.
+3. Notion seeding: BGC Tasks DB gets Sensor sprint-1 + ODIN sprint-4-through-8 tasks under "Personal Projects" category.
+4. Confirm Session 5 schema-refactor scope by reading `output-schemas.ts`.
+
+ARCHITECT reads first, in order:
+1. `Road-to-Agentic-Excellence/CLAUDE.md`
+2. This session log
+3. `BGC:ODIN/state.md` (parked-state context)
+4. `BGC:ODIN/odin-app/src/lib/agents/output-schemas.ts` (schema-refactor scope check)
+5. `BGC:SENSOR/docs/gtm.md` (to update sequencing if Decision pushes ODIN-first)
+
+**Hard stop for Session 4:** No code changes to `odin-app/`. PLAID + planning only. Schema refactor begins in Session 5.
+
+---

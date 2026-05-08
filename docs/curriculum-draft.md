@@ -139,4 +139,25 @@ This is also the first time the system produced a *durable artifact* — the fou
 
 ---
 
-*Next curriculum touch: Session 3 (ODIN audit) — likely a lesson about archaeology vs. greenfield (auditing existing code through the same PLAID frame).*
+### Session 3 (2026-05-08)
+**Insight:** The README is fiction. The audit is non-fiction.
+
+Session 1's MAPPER triage scored ODIN at closeness 3 / marketing 4 / priority 7. Session 3's actual audit corrected to closeness 4 / marketing 5 / priority 9 — a one-tier underestimate that flipped the build sequence. Sensor was about to lead the build sprint; ODIN actually does.
+
+The Session 1 score was generated from the kickoff prompt + README descriptions. The Session 3 score was generated from reading `package.json`, the `src/` tree, the test results, and the parked `state.md`. The gap was not small.
+
+For any inherited or partially-built project, reading the README is not auditing. The README is what the founder *wishes* the repo were. The audit is what the repo IS. In ODIN's case, the README was actively misleading (calling it "regression testing for D8TAOPS"); the actual product is a 6-agent performance consulting pipeline.
+
+When this gets taught: **"The README is fiction. The audit is non-fiction."**
+
+The audit-before-triage discipline for ARCHITECT:
+1. Read the README (5 min)
+2. Read the actual repo tree, package.json, key source files (20 min)
+3. Note where the README and the repo disagree
+4. Score based on the repo, not the README
+
+This is the same lesson as Session 2's PLAID-surfaces-the-questions-you-avoided, applied to a different artifact. Both share a pattern: **the act of writing forces the system to be honest with itself.** PLAID does this for new builds; audit does this for inherited ones.
+
+---
+
+*Next curriculum touch: Session 4 (ODIN PLAID retroactive) — likely a lesson about back-filling vision/PRD against existing code (vs. authoring forward like Sensor).*

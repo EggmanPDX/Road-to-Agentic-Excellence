@@ -157,4 +157,77 @@
 
 ---
 
-*Next decisions will append below as they emerge in Session 2+.*
+## Decision 009 — 2026-05-08 (Session 3 start)
+
+**Context:** Several skills referenced in CLAUDE.md and PLAID methodology (`prompt-architect`, `terminal-code-mastery`, `fan-out-fan-in`, `validate-vision.js`) are not present at `~/.claude/skills/`. PLAID itself was missing until pasted in Session 2.
+
+**Decision:** Skills are pasted on demand, not pre-verified. Gregg inputs each skill's content when an agent needs it. ARCHITECT does not block sessions on skill availability.
+
+**Reasoning:** Gregg's chosen workflow. Avoids the alternative (pre-flight verification of every skill before each session) which adds overhead and forces a snapshot of skills that change.
+
+**Karpathy check:** N/A.
+
+**Reversible?:** Yes — can flip to a manifest-based skill registry later if churn becomes painful.
+
+**Implication for ARCHITECT:** When a skill is needed, name it explicitly in chat ("Need PLAID methodology") rather than calling Skill tool blindly. Wait for paste before proceeding.
+
+---
+
+## Decision 010 — 2026-05-08 (Session 3 start)
+
+**Context:** Open Loop on Notion BGC Tasks category — schema has `Content & LinkedIn`, `Workshops`, `Frameworks`, `Personal Projects` but no Builds category for Sensor/ODIN/ENKI work.
+
+**Decision:** Use **Personal Projects** as the category for build work. Sensor, ODIN, ENKI sprint tasks all land here. Type field distinguishes umbrella (`Project`) from individual sprint items (`Task`).
+
+**Reasoning:** Per Gregg's call. The DB is already named "BGC Tasks & Projects" — every row is BGC-scoped, so a "BGC" sub-category would be redundant. "Personal Projects" reads cleanly. Future split possible if the category gets crowded.
+
+**Karpathy check:** N/A.
+
+**Reversible?:** Yes — Notion select options can be added/renamed at any time.
+
+---
+
+## Decision 011 — 2026-05-08 (Session 3 start)
+
+**Context:** ODIN identity ambiguity — `~/Developer/CLAUDE.md` calls BGC:ODIN "Pipeline regression testing for 6-agent system"; Road-to-Agentic-Excellence kickoff and Session 1 docs call ODIN "The ID Killer 6-agent performance consulting pipeline."
+
+**Decision:** **ODIN is "The ID Killer" — a 6-agent performance consulting pipeline.** This is the canonical product description. The "regression testing" wording in `~/Developer/CLAUDE.md` is stale/wrong and will be corrected in this session.
+
+**Reasoning:** Per Gregg's call. The kickoff prompt for this whole initiative names ODIN's product identity explicitly. The local Developer/CLAUDE.md description likely lags an earlier-life version of the project.
+
+**Karpathy check:** N/A (clarification, not architecture).
+
+**Reversible?:** Yes — wording is metadata, not implementation.
+
+**Action:** ARCHITECT updates `~/Developer/CLAUDE.md` ODIN row in this session.
+
+---
+
+## Decision 012 — 2026-05-08 (Session 3)
+
+**Context:** ODIN audit confirmed agents 1-2 live-validated against Gemini 2.5 Flash; agents 3-6 parked since 2026-04-09 on free-tier quota. `state.md` notes Claude Opus is incompatible with the current Zod schemas because of `propertyNames` usage — a refactor item, not a wall.
+
+**Options considered:**
+- Claude with schema refactor (~30–45 min per state.md note)
+- Gemini paid tier (fastest, no refactor, but stack split with Sensor)
+- Hybrid Claude + Gemini fallback (most complex, defer)
+
+**Decision:** **Claude with schema refactor.** Refactor Zod schemas to remove `propertyNames` usage, rewire pipeline.ts to use `@ai-sdk/anthropic` (already in `package.json` deps), validate mocks still pass, then full live run on Anthropic.
+
+**Reasoning:** Per Gregg's call. Brand consistency matters more than refactor speed. Sensor uses Claude (Decision 007), and a unified "Software 3.0 on Claude" narrative is cleaner for AMPLIFIER than a stack split that has to be explained in every post. The schema refactor is bounded scope.
+
+**Karpathy check:** Strengthens — staying on Claude keeps the system independent of Google's eventual native offerings and aligns with the tech-stack lock in CLAUDE.md.
+
+**Reversible?:** Yes, but costly — provider swap mid-build is one major refactor cycle. Locked for the foreseeable horizon.
+
+**Action items (Session 5):**
+1. Refactor Zod schemas in `odin-app/src/lib/agents/output-schemas.ts` to remove `propertyNames` usage
+2. Update `odin-app/src/lib/agents/pipeline.ts` model selection to call `@ai-sdk/anthropic`
+3. Verify `mock-pipeline.test.ts` still passes (8/8)
+4. Run `live-pipeline.test.ts` end-to-end on Anthropic
+5. Confirm H3-H6 schema validation passes live
+6. Document any output-shape differences vs. mock data
+
+---
+
+*Next decisions will append below as they emerge in Session 3+.*

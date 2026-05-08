@@ -20,12 +20,14 @@
 
 | Build | Repo | Closeness | Marketing | Priority | Karpathy |
 |-------|------|-----------|-----------|----------|----------|
-| Sensor | `EggmanPDX/BGC-Sensor` | 2 | 5 | **7** | Passes 4/4 |
-| ODIN | `EggmanPDX/BGC-ODIN` | 3 | 4 | 7 | Passes 4/4 |
+| **ODIN** | `EggmanPDX/BGC-ODIN` | **4** | **5** | **9** ⬆️ | Passes 4/4 |
+| Sensor | `EggmanPDX/BGC-Sensor` | 2 | 5 | 7 | Passes 4/4 |
 | ENKI | `EggmanPDX/enki-project` | 3 | 3 | 6 | Passes 3/4 |
 | D8-SALES | `EggmanPDX/d8-sales-intel` | 4 | 2 | 6 | Passes 2/4 |
 
-**Sequencing call (MAPPER → ARCHITECT):** Sensor and ODIN tie on raw score, but Sensor wins on tiebreaker — highest commercial PMF (Teams bot for HR/L&D managers is exactly the ICP) and Karpathy 4/4. ODIN second (highest expert-credibility signal). ENKI third. D8-SALES → AMPLIFIER as a proof point, not a build target.
+**Sequencing call (MAPPER → ARCHITECT, revised post-Session 3 audit):** ODIN now leads. The Session 3 audit revealed ODIN is at closeness 4 (was 3) with marketing value 5 (was 4) — closer to ship and more compelling than initially scored. Agents 1-2 are live-validated; the pipeline runs. Sensor remains the second priority — highest PMF for the ICP, but earlier in the build cycle (closeness 2, no PLAID until Session 2). ENKI third. D8-SALES → AMPLIFIER as proof point.
+
+**Sequencing implication:** Sprint planning may flip — running ODIN to ship first (it's closer) builds the credibility moat before Sensor's launch. AMPLIFIER can lead the public narrative with ODIN as "Software 3.0 for performance consulting" and Sensor lands as the second story. ARCHITECT to confirm with Gregg before Session 5 (Sensor Phase 0).
 
 **Resolved 2026-05-08:** `BGC-ODIN` confirmed canonical. `ODIN` (2026-03-09) and `odin-system` (2026-03-10) are predecessors slated for archive (see Decision 006).
 
@@ -98,39 +100,96 @@
 - Requires Software 3.0? Yes — orchestrated agent pipeline is the product.
 - **Passes all four.**
 
-### Current state
-- Repo exists. Last push 2026-05-07. `.claude/` directory present (active Claude Code project).
-- Has `.env.example`, .DS_Store noise (cleanup needed before public).
-- **Need deeper inspection in Session 3** before locking the last-20% list — file tree partially viewed but not exhaustively.
-- Predecessors `ODIN` (2026-03-09) and `odin-system` (2026-03-10) — confirm BGC-ODIN is canonical and archive the others.
+### Current state (verified Session 3 audit, 2026-05-08)
+
+**The actual product:** A 6-agent (plus Agent 0 orchestrator) sequential pipeline for performance consulting. Identity confirmed as "The ID Killer" per Decision 011. The repo's `README.md` currently contains stale "regression testing suite" wording that needs replacing — the actual project IS the consulting pipeline.
+
+**Active app at `odin-app/`** (Next.js 16 + React 19 + TypeScript):
+- Pages: home (`/`), `/chat` (scenario input + chat panel), `/runs/[id]` (run detail viewer)
+- 4 API routes: `/api/pipeline/start`, `/api/pipeline/runs`, `/api/pipeline/[runId]/decide`, `/api/pipeline/[runId]/events`
+- Pipeline orchestration: `src/lib/agents/pipeline.ts`, `pipeline-manager.ts`, `loader.ts`
+- Schema validation (Zod): `output-schemas.ts`, `schema-validator.ts` — H1 through H6 handoff validators
+- Mock harness with 8/8 tests passing
+- Live pipeline test against Gemini 2.5 Flash/Pro
+- 7 substantial agent prompts in `prompts/` (17–56 KB each — these are the proprietary IP)
+- SQLite database via `better-sqlite3`: `data/odin.db` (3.2MB, with WAL = active run history)
+- `src/lib/db/`: schema, queries, client, tests
+- shadcn/ui components: tabs, card, scroll-area, tooltip, badge, table, button, separator, collapsible
+- Pipeline UI: `agent-node.tsx`, `pipeline-panel.tsx`, `validation-badge.tsx`
+- Chat UI: `chat-panel.tsx`, `chat-message.tsx`, `decision-prompt.tsx`, `scenario-cards.tsx`
+- Dashboard UI: `runs-table.tsx`, `agent-output-viewer.tsx`
+- Test scenarios in `src/lib/scenarios/scenarios.json` + `regression.e2e.test.ts` (4 scenarios)
+
+**The 6 agents (plus Agent 0):**
+- Agent 0 — Orchestrator
+- Agent 1 — Sleuth-Gatekeeper (root cause via 7 Ingredients audit)
+- Agent 2 — Behavioral Scientist Architect (4-door allocation, WIIFM)
+- Agent 3 — Product Engineer
+- Agent 4 — Analyst-Governor
+- Agent 5 — Cultural Architect
+- Agent 6 — Guardian
+
+**Live validation status (per `state.md`, parked 2026-04-09):**
+- Agents 1-2: PRODUCTION-READY ✅ — live-validated 4× this session, schema H1+H2 passing on real Gemini outputs
+- Agents 3-6: BLOCKED on Gemini API quota (NOT an architecture issue — code path is identical)
+- Note: "Claude Opus verified as incompatible with current Zod schemas (`propertyNames` unsupported). Not a viable alternate path without refactor."
+
+**Repo hygiene flags:**
+- 23 large `.docx` versioned files at root (~16 MB) — Mar 7 build-era artifacts. Archive to `.archive/` or `gdogsjunk` Drive.
+- `.DS_Store` committed at root.
+- README is a stub with stale description.
+- Predecessors `ODIN` (Mar 9) and `odin-system` (Mar 10) — ✅ archived in Session 1 (Decision 006).
 
 ### Done means
-- [ ] All 6 agents documented and runnable end-to-end
-- [ ] One reference performance-consulting case study runs through the full pipeline
-- [ ] Public README explaining "The ID Killer" positioning + the methodology
+- [ ] All 6 agents (plus Agent 0) live-validated end-to-end on a single reference scenario
+- [ ] AI provider decision locked (Gemini paid tier OR Claude with schema refactor OR hybrid)
+- [ ] Decision flag UI tested live (currently scaffolded, not exercised)
+- [ ] Web UI smoke test: home → /chat → start scenario → /runs/[id] all functional
+- [ ] Public README explaining "The ID Killer" + methodology + pipeline diagram
+- [ ] `.docx` build artifacts archived out of the public repo
 - [ ] Repo is public
-- [ ] Demo accessible (hosted or recorded)
+- [ ] Demo accessible (hosted Vercel deploy OR recorded)
+- [ ] AMPLIFIER package complete
 
-### Blockers
-- Canonical-repo decision (above).
-- Full state audit not yet done.
-- No AMPLIFIER package yet.
+### Blockers (Session 3 → Session 4)
+- ✅ **AI provider decision RESOLVED (Decision 012, 2026-05-08):** Claude with schema refactor. Action items in decisions.md.
+- Web UI not smoke-tested by ARCHITECT yet (parked since 2026-04-09)
+- Repo hygiene blocks public flip (.docx files, .DS_Store, stub README)
+- 4 scenarios exist; need to pick the one that goes in the public demo (KCU off-limits)
 
-### Estimated sessions
-- Audit + canonical decision + cleanup: 1 session
-- Last-mile completion (depends on audit): 2–4 sessions
-- Public package: 1 session
-- **Total: 4–6 focused sessions**
+### Estimated sessions (revised after audit)
+- Session 4: AI provider decision + retroactive PLAID (vision/prd/roadmap/gtm using existing scaffold)
+- Session 5: Schema refactor (if Claude chosen) OR direct full-6-agent live regression (if Gemini paid)
+- Session 6: Web UI smoke + decision-flag exercise; pick reference scenario
+- Session 7: Repo cleanup + public README + Vercel deploy
+- Session 8: Flip public + AMPLIFIER launch package
+- **Total: 4–5 focused sessions** (down from 4–6 in Session 1 estimate — closeness was undersold)
 
-### Last 20% task list (provisional — refine after audit)
-1. Confirm `BGC-ODIN` canonical; archive `ODIN` + `odin-system`
-2. Full file-tree audit — what works, what's stub, what's missing
-3. Run PLAID retroactively to generate marketing-grade docs
-4. Pick one reference case (KCU is off-limits — needs synthetic or different real org)
-5. End-to-end pipeline run on the case
-6. Public README with pipeline diagram
-7. Flip to public
-8. Hand to AMPLIFIER
+### Last 20% task list (revised, Session 3)
+
+**Session 4 (AI provider + PLAID):**
+1. Decision 012 — pick AI provider; if Claude, scope the schema refactor
+2. Run retroactive PLAID on ODIN — vision.json + product-vision.md + prd.md + product-roadmap.md + gtm.md (input: existing scaffold + this audit)
+
+**Session 5 (provider implementation):**
+3. If Claude: refactor Zod schemas to remove `propertyNames`; rewire pipeline.ts model selection; verify mock tests still pass; run live with Anthropic
+4. If Gemini paid: upgrade billing tier; re-run live regression on agents 3-6
+5. Schema H3-H6 validated live; full 6-agent run documented
+
+**Session 6 (UI + scenario lock):**
+6. Smoke-test the Next.js app: `cd odin-app && npm install && npm run dev`; walk through home → /chat → /runs/[id]
+7. Trigger decision-flag scenario; exercise async resolver UI
+8. Pick the reference scenario for public demo (synthetic or non-KCU real org)
+
+**Session 7 (cleanup + public README):**
+9. Move `.docx` files out of repo to `gdogsjunk` Drive's BGC archive (decision: keep `.md` versions, archive `.docx`)
+10. Add `.DS_Store` to `.gitignore` if not already; remove the committed one
+11. Replace README with public-grade version (positioning + how-it-works diagram + run instructions + license)
+12. Vercel deploy — `sensor.buildgreatcourses.com` style subdomain or `odin.buildgreatcourses.com`
+
+**Session 8 (public + AMPLIFIER):**
+13. `gh repo edit EggmanPDX/BGC-ODIN --visibility public` (verify no secrets first)
+14. Hand to AMPLIFIER: launch post + LinkedIn cadence per `gtm.md`
 
 ---
 
