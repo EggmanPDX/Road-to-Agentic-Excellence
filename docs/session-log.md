@@ -43,9 +43,9 @@
 
 ### Open Loops
 
-1. **ODIN canonical decision** — `BGC-ODIN` treated as canonical for triage but not formally confirmed. Resolve at start of Session 3 (the ODIN audit session).
-2. **Sensor AI provider** — Gemini in current README, Claude per CLAUDE.md tech stack. Resolve in Session 2 PLAID vision.md.
-3. **`KCU-D8_SUPPORT_WEBAPP` on EggmanPDX** — should this be on `gregg-eiler_d8taops` instead, per the CLAUDE.md rule? Not blocking, but flag.
+1. ~~**ODIN canonical decision**~~ — **RESOLVED 2026-05-08:** `BGC-ODIN` confirmed canonical (Decision 006). `ODIN` and `odin-system` slated for archive pending Gregg's go-ahead.
+2. ~~**Sensor AI provider**~~ — **RESOLVED 2026-05-08:** Claude/Anthropic confirmed (Decision 007). Gemini swap added to Sensor Last-20% list.
+3. ~~**`KCU-D8_SUPPORT_WEBAPP` dual-repo state**~~ — **RESOLVED 2026-05-08:** Intentional (Decision 008). No action needed.
 4. **`SOP/` directory unpopulated** — research-workflow.md, build-workflow.md, publish-workflow.md still empty. SCOUT/AMPLIFIER will need them eventually. Park until Session 4+ when the workflows have real shape.
 5. **`context/gregg-profile.md` and `context/tech-stack.md` unpopulated** — content already exists in CLAUDE.md. Either hydrate (extract from CLAUDE.md) or delete and reference CLAUDE.md sections. Decide at Session 2 start.
 
@@ -80,10 +80,10 @@ ARCHITECT reads first, in order:
 ### Tasks (in order)
 
 1. [ ] **TASK-001** — ARCHITECT session-open: read CLAUDE.md, this log, and the Sensor section of priority-builds.md. State session goal aloud. — Est: 10 min — Agent: ARCHITECT
-2. [ ] **TASK-002** — Resolve open loops 1 and 5 from the Session 1 log: confirm BGC-ODIN canonical (or revise) and decide whether to hydrate or delete `gregg-profile.md` + `tech-stack.md`. — Est: 10 min — Agent: ARCHITECT + Gregg
+2. [ ] **TASK-002** — Resolve remaining open loop 5 from the Session 1 log: decide whether to hydrate or delete `gregg-profile.md` + `tech-stack.md`. (Open loops 1, 2, 3 already resolved post-Session 1.) — Est: 5 min — Agent: ARCHITECT + Gregg
 3. [ ] **TASK-003** — Clone `BGC-Sensor` to local: `~/Developer/BGC:SENSOR` — Est: 5 min — Agent: TASKMASTER
 4. [ ] **TASK-004** — Invoke `plaid` skill against Sensor with kickoff context (Teams bot, consent-first, manager dashboard, research-backed coaching). Outputs land in `BGC-Sensor/docs/`. — Est: 45 min — Agent: ARCHITECT runs PLAID, Gregg drives
-5. [ ] **TASK-005** — Resolve Decision 003 in `vision.md`: Anthropic vs. Gemini for the intervention generator. Cite reasoning. — Est: 10 min — Agent: ARCHITECT
+5. [ ] **TASK-005** — Document Decision 007 (Claude/Anthropic) in `vision.md` as the locked AI provider with one-paragraph reasoning. Add Sensor Last-20% task: replace `@google/genai` with Anthropic SDK in `services/`. — Est: 10 min — Agent: ARCHITECT
 6. [ ] **TASK-006** — Commit Sensor PLAID artifacts to `BGC-Sensor`. — Est: 5 min — Agent: TASKMASTER
 7. [ ] **TASK-007** — SCRIBE: append Session 2 entry to this log. Curriculum note: what PLAID surfaced about Sensor that wasn't visible at the kickoff. — Est: 10 min — Agent: SCRIBE
 8. [ ] **TASK-008** — Update Notion BGC Tasks DB: seed Sensor sprint-1 task list from `priority-builds.md` Last 20% list. — Est: 10 min — Agent: TASKMASTER

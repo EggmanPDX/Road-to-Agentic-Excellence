@@ -111,4 +111,50 @@
 
 ---
 
+## Decision 006 — 2026-05-08 (post-session)
+
+**Context:** Decision 002 deferred final ODIN canonical confirmation to Session 3. Gregg confirmed at end of Session 1.
+
+**Decision:** `EggmanPDX/BGC-ODIN` is canonical. `EggmanPDX/ODIN` and `EggmanPDX/odin-system` are predecessors and should be archived.
+
+**Reasoning:** Most-recent push held; no ambiguity remains. Archiving the two predecessors prevents future sessions from re-litigating which repo is real, and removes them from active triage scope.
+
+**Karpathy check:** N/A.
+
+**Reversible?:** Yes — GitHub archive is reversible (unarchive at any time). No data loss.
+
+**Action:** Archive `ODIN` and `odin-system` (pending Gregg's go-ahead — destructive-action rule).
+
+---
+
+## Decision 007 — 2026-05-08 (post-session)
+
+**Context:** Decision 003 deferred Sensor AI provider choice to PLAID vision.md. Gregg called it before Session 2.
+
+**Decision:** Sensor uses Claude (Anthropic) as the runtime AI provider. The current `@google/genai` (Gemini) wiring in `BGC-Sensor` will be swapped during Session 2 implementation.
+
+**Reasoning:** Aligns with the global tech stack lock in CLAUDE.md (Claude is primary AI). Strengthens the Software 3.0 "I built this on Claude" narrative for AMPLIFIER content. Gemini was a Google AI Studio convenience during prototyping — not a load-bearing decision.
+
+**Karpathy check:** Indirectly strengthens — staying on Claude keeps the system independent of Google's eventual native team-monitoring features.
+
+**Reversible?:** Yes — provider swap is one service module rewrite (`services/geminiService` → `services/claudeService` or similar).
+
+**Implication for Session 2:** Update PLAID vision.md to specify Anthropic. Add a Sensor Last-20% task: replace Gemini SDK with Anthropic SDK before any further feature work.
+
+---
+
+## Decision 008 — 2026-05-08 (post-session)
+
+**Context:** `KCU-D8_SUPPORT_WEBAPP` exists on `EggmanPDX` AND on `gregg-eiler_d8taops`. Flagged in Session 1 log as a possible misplacement.
+
+**Decision:** Intentional dual-repo state. The d8taops copy is the work-context truth; the EggmanPDX copy is the personal-archive copy. No action needed — it's not a misplacement.
+
+**Reasoning:** Per Gregg, "KCU-D8 also lives on d8taops git." Confirming intentional. Rule-of-thumb refresher for ARCHITECT going forward: cross-account duplication of D8 work artifacts is allowed; cross-account ownership of build targets is not. KCU is a proof point, not a build target.
+
+**Karpathy check:** N/A.
+
+**Reversible?:** Yes — easy to delete the EggmanPDX copy later if desired.
+
+---
+
 *Next decisions will append below as they emerge in Session 2+.*

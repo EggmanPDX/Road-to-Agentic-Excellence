@@ -27,7 +27,7 @@
 
 **Sequencing call (MAPPER → ARCHITECT):** Sensor and ODIN tie on raw score, but Sensor wins on tiebreaker — highest commercial PMF (Teams bot for HR/L&D managers is exactly the ICP) and Karpathy 4/4. ODIN second (highest expert-credibility signal). ENKI third. D8-SALES → AMPLIFIER as a proof point, not a build target.
 
-**Open question for ARCHITECT (resolve at Session 2 start):** Three ODIN repos exist in EggmanPDX — `BGC-ODIN` (2026-05-07, treated as canonical), `ODIN` (2026-03-09), `odin-system` (2026-03-10). Confirm canonical and archive the other two before any ODIN build session.
+**Resolved 2026-05-08:** `BGC-ODIN` confirmed canonical. `ODIN` (2026-03-09) and `odin-system` (2026-03-10) are predecessors slated for archive (see Decision 006).
 
 ---
 
@@ -77,14 +77,14 @@
 3. Decide Teams Graph API approach (bot framework vs. webhook receiver)
 4. Replace `services/analysisEngine` simulation with Teams adapter
 5. Add Supabase auth for manager dashboard
-6. Wire Anthropic for intervention generation (current code uses Gemini — confirm with Gregg)
+6. Wire Anthropic SDK for intervention generation, replacing `@google/genai` (Decision 007 — confirmed Claude)
 7. End-to-end demo with one real channel
 8. Public README + 60-second demo GIF
 9. Flip repo to public
 10. Deploy to Vercel
 11. Hand to AMPLIFIER for launch post
 
-**Note for ARCHITECT:** Stack mismatch flag — README references `@google/genai` (Gemini), but CLAUDE.md tech stack locks Claude as primary AI. Resolve in PLAID. If Gemini was a prototype convenience, swap to Claude before going public.
+**Resolved 2026-05-08 (Decision 007):** Sensor will use Claude (Anthropic). The current `@google/genai` wiring is a prototype artifact and will be replaced during Session 2 implementation. PLAID `vision.md` should specify Anthropic as the locked provider.
 
 ---
 
