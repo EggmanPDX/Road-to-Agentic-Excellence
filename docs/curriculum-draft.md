@@ -122,6 +122,21 @@ This module is the differentiator. Without it, the curriculum is just "I built s
 
 When this gets taught, the headline is: **"Your first agent isn't the one that does the work. It's the one that decides what work to do."** That's ARCHITECT. And the lesson the audience needs is that the planning substrate isn't overhead — it's the difference between a system and a script.
 
+### Session 2 (2026-05-08)
+**Insight:** PLAID before code is not bureaucracy. It's the moment the founder argues with themselves about the questions they've been avoiding.
+
+Sensor's scaffold had been "almost ready to build" for weeks. The actual blockers weren't engineering — they were:
+1. A stack mismatch (Gemini in code vs. Claude in policy) that nobody had named
+2. An adapter shape (Teams bot vs. webhook receiver) that was unowned
+3. A pricing model that was undefined
+4. A magic moment that was implicit in the data model but never written down
+
+PLAID surfaced all four in a single session. The building can now happen — and crucially, future build sessions don't need to re-litigate any of these because they're locked in `vision.json`, `prd.md`, and `gtm.md`.
+
+When this gets taught, the headline is: **"PLAID's job isn't to write a spec. It's to surface the four questions you've been avoiding so the build session that follows is actually productive."**
+
+This is also the first time the system produced a *durable artifact* — the four PLAID docs are read by every future Sensor session. That changes the cost equation. One PLAID session amortizes across 6–7 build sessions.
+
 ---
 
-*Next curriculum touch: Session 2, after the first PLAID run produces a real artifact to extract a lesson from.*
+*Next curriculum touch: Session 3 (ODIN audit) — likely a lesson about archaeology vs. greenfield (auditing existing code through the same PLAID frame).*
