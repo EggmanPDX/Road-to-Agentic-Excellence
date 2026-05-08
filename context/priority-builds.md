@@ -222,8 +222,8 @@ Surfaced from EggmanPDX repo list. Do not build here. Audit later or kill.
 
 | Repo | Status | Disposition |
 |------|--------|-------------|
-| `ODIN` | Predecessor to BGC-ODIN | Archive after canonical confirmed |
-| `odin-system` | Predecessor to BGC-ODIN | Archive after canonical confirmed |
+| `ODIN` | Predecessor to BGC-ODIN | ✅ Archived 2026-05-08 |
+| `odin-system` | Predecessor to BGC-ODIN | ✅ Archived 2026-05-08 |
 | `D8-DOCUMENT-ENGINE` | Unknown | Audit Session 5+ |
 | `D8-DESIGN-NERVOUS-SYSTEM` | Unknown | Audit Session 5+ |
 | `D8-Brand-Architect_v1` | Media creator | Audit Session 5+ |

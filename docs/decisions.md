@@ -123,7 +123,7 @@
 
 **Reversible?:** Yes — GitHub archive is reversible (unarchive at any time). No data loss.
 
-**Action:** Archive `ODIN` and `odin-system` (pending Gregg's go-ahead — destructive-action rule).
+**Action:** ✅ Done 2026-05-08 — `EggmanPDX/ODIN` and `EggmanPDX/odin-system` archived via `gh repo archive`. BGC-ODIN remains active as the sole working repo.
 
 ---
 
