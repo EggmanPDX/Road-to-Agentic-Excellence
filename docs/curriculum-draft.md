@@ -160,4 +160,19 @@ This is the same lesson as Session 2's PLAID-surfaces-the-questions-you-avoided,
 
 ---
 
-*Next curriculum touch: Session 4 (ODIN PLAID retroactive) — likely a lesson about back-filling vision/PRD against existing code (vs. authoring forward like Sensor).*
+### Session 4 (2026-05-08)
+**Insight:** Forward PLAID and retroactive PLAID are the same artifact, used in opposite directions.
+
+Sensor's PLAID (Session 2) had to *define* everything. ODIN's PLAID (Session 4) had to *reference* a working product. The agent prompts, schemas, orchestration code, and database all already existed. PLAID's job was to surface the strategic questions the existing artifacts couldn't answer on their own — magic moment definition, ICP positioning, IP-protection strategy, sequencing, demo scenario choice.
+
+Forward PLAID asks "what should this be?" Retroactive PLAID asks "what does this *want* to be, given what's already there?" Same artifacts; different starting point.
+
+The strongest moment in ODIN's PLAID was the section coordinating with Sensor's. Decision 013 (sequencing — ODIN ships first) couldn't have been made by either PLAID alone; it emerged from holding both in the same hand.
+
+When this gets taught: **"PLAID isn't only for greenfield. It's for any moment when the product needs to argue with itself."**
+
+Curriculum implication for Module 2: needs a sub-module on **multi-product orchestration** — how PLAID artifacts from related products inform each other and force sequencing decisions neither would surface alone.
+
+---
+
+*Next curriculum touch: Session 5 (Schema Refactor + Anthropic E2E) — likely a builder-craft lesson about provider swaps and JSON-schema translation.*

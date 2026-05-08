@@ -230,4 +230,55 @@
 
 ---
 
-*Next decisions will append below as they emerge in Session 3+.*
+## Decision 013 — 2026-05-08 (Session 4)
+
+**Context:** Session 3 audit revealed ODIN is closer to ship than Sensor (closeness 4 vs 2). Open question: AMPLIFIER launches with ODIN-first, Sensor-first, or parallel tracks?
+
+**Options considered:**
+- ODIN-first, Sensor as second story (compounding narrative)
+- Sensor-first (HR-audience-friendly, but slower to ship)
+- Parallel tracks (build-in-public both, no clear lead)
+
+**Decision (default; Gregg can override):** **ODIN-first.** Ship ODIN public in Sessions 5–8, then resume Sensor PLAID Phase 0 as Session 9+. AMPLIFIER's launch sequence leads with ODIN as the credibility wedge.
+
+**Reasoning:** ODIN is closer to ship and the methodology IP is the strongest brand moat. Once ODIN is public, "the same builder" can land Sensor as the second product, compounding the narrative. Inverse (Sensor-first while ODIN sits parked) wastes the asset that already exists.
+
+**Karpathy check:** Strengthens — ODIN is the highest-Karpathy build (4/4) and the public artifact that proves Software 3.0 isn't theoretical.
+
+**Reversible?:** Yes — sequencing call only. Sensor's PLAID artifacts remain valid; only the launch order shifts.
+
+**Implication for Sensor's gtm.md:** Pre-launch Playbook (currently authored as if Sensor leads) needs a small update — "Sensor's launch follows ODIN's by ~3-4 months; pre-launch posts reference ODIN's prior launch as proof point." Update during Session 4.
+
+---
+
+## Decision 014 — 2026-05-08 (Session 4)
+
+**Context:** ODIN repo has three competing state files: `state.md`, `SESSION_STATE.md`, `SESSION_SUMMARY.md`. Open Loop 3 from Session 3.
+
+**Decision:** **`state.md` is the canonical state file.** `SESSION_STATE.md` and `SESSION_SUMMARY.md` move to a new `docs/archive/sessions/` directory inside ODIN, preserving history but removing the canonical-confusion at root.
+
+**Reasoning:** `state.md` follows the BRAIN convention from `~/Developer/CLAUDE.md` ("BRAIN folder contains decisions.md, schema.md, domain.md, state.md"). The other two are session retrospectives — valuable history, wrong location. Archive cleanly.
+
+**Karpathy check:** N/A.
+
+**Reversible?:** Yes — file moves are reversible.
+
+**Action:** Execute moves in Session 7 (cleanup phase) — not now, since the hard-stop for Session 4 is no code/repo changes to `odin-app/` or its parent. Tracked in priority-builds.md last-20% list.
+
+---
+
+## Decision 015 — 2026-05-08 (Session 4)
+
+**Context:** ODIN public demo needs a single reference scenario. 4 scenarios in `scenarios.json`. Open Loop 2 from Session 3.
+
+**Decision:** **Scenario 1 — Call Center System Failure** is the public demo scenario. Other 3 remain in the test suite.
+
+**Reasoning:** Already live-validated (agents 1-2 tested 4× successfully on 2026-04-08); tests Performance Theater detection (the most provocative differentiator for AMPLIFIER's narrative — "they asked for empathy training, but the software crashes twice a day"); numbers are concrete (45 agents, 30% understaffed, 2× daily crashes); root cause type = `system_failure` (clean diagnosis). Strong story for the public README and demo video.
+
+**Karpathy check:** N/A.
+
+**Reversible?:** Yes — can swap reference scenario before Session 7 if testing surfaces a stronger one.
+
+---
+
+*Next decisions will append below as they emerge in Session 4+.*
