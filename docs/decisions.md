@@ -281,4 +281,23 @@
 
 ---
 
-*Next decisions will append below as they emerge in Session 4+.*
+## Decision 016 — 2026-05-08 (Session 5 close-out)
+
+**Context:** During Session 5 commit, discovered the `odin-app/` directory inside `BGC:ODIN` is a nested Git repo (gitlink mode 160000, no `.gitmodules`) whose remote still points at `EggmanPDX/ODIN` — which we archived in Session 1 / Decision 006. Push to that archived remote returns 403. Session 5's odin-app code (output-schemas.ts, pipeline.ts, tests, package.json, .env.example) is committed locally on `feat/pipeline-runner` branch but unable to reach GitHub.
+
+**Decision:** **Defer the structural fix to Session 6.** Local Session 5 commit preserves all work. Session 6's first task is restructuring odin-app's relationship to BGC-ODIN — three options to evaluate at Session 6 start:
+- Option A: De-submodule entirely. Copy odin-app contents into BGC-ODIN as regular tracked files. Loses separate Git history but simplest going forward.
+- Option B: Update odin-app's remote to a new dedicated repo (`EggmanPDX/odin-app` — net-new). BGC-ODIN keeps the gitlink. Preserves history.
+- Option C: Unarchive `EggmanPDX/ODIN` temporarily, push, then re-archive. Quick hack; doesn't fix the underlying confusion.
+
+**Reasoning:** Session 5 burned 6+ hours on the schema refactor; structural Git work is its own focused task. Local commit means no work is lost.
+
+**Karpathy check:** N/A.
+
+**Reversible?:** Yes. All work is preserved locally on disk + on the archived ODIN remote (`feat/pipeline-runner` branch).
+
+**Action:** Session 6 TASK-113-pre. ARCHITECT picks Option A/B/C with Gregg at session start.
+
+---
+
+*Next decisions will append below as they emerge in Session 5+.*

@@ -175,4 +175,28 @@ Curriculum implication for Module 2: needs a sub-module on **multi-product orche
 
 ---
 
-*Next curriculum touch: Session 5 (Schema Refactor + Anthropic E2E) — likely a builder-craft lesson about provider swaps and JSON-schema translation.*
+### Session 5 (2026-05-08)
+**Insight:** In a structured-output refactor against an external API, your plan-mode catalog will be wrong by ~5x. Build the escape hatch into the plan from day one.
+
+Plan-mode's two Explore agents did good work — read the schemas, ran the catalog, identified `z.record(z.string(), z.any())` as the primary blocker. The plan said ~2 hours. Reality: 6 hours, 5 successive incompatibility classes, only the last of which (manual JSON parse) was an architectural fix that solved the entire class.
+
+The five rounds:
+1. `z.record(...)` generates `propertyNames` constraint — Anthropic rejects.
+2. `z.number().min(1).max(10)` generates numeric range — Anthropic rejects.
+3. `z.any()` generates empty schema `{}` — Anthropic rejects.
+4. Agent 3's 42 optional fields exceed 24-cap on tool-use grammar — Anthropic rejects.
+5. Agent 3's reshaped schema exceeds total grammar-size ceiling — Anthropic rejects.
+
+Each round was caught by live testing, not static analysis. Anthropic's structured-output mode has constraints that aren't in the public docs because they're grammar-compilation implementation details. No amount of careful Zod reading would have surfaced them. The only catalog that worked was running the live pipeline and watching it fail.
+
+The right architectural move (manual JSON parse — prompt for JSON, parse `result.text`, validate with Zod post-hoc) is a well-documented pattern in production agent pipelines. It bypasses ALL Anthropic structured-output limits at once. It should have been Plan B in the original plan; instead it became Round 5.
+
+When this gets taught: **"For external structured-output APIs, your catalog will be wrong. Time-box static analysis. Have the escape hatch ready."**
+
+This is a sub-module candidate for Module 5 (Stack Decisions That Don't Age Out): **structured output vs. manual JSON parse — when each fits.** Structured output gives you grammar-enforced validity AND constrains the agent's vocabulary. Manual parse gives you architectural freedom AND exposes you to Claude's natural output drift (which the post-hoc Zod schema must handle defensively — null-stripping, type coercion, descriptive-string-or-number unions).
+
+A meta-lesson also: **the plan worked even though the plan was wrong.** The plan-mode discipline produced a clean structure (Phase 1 → Phase 2 → ExitPlanMode → execute) that I could iterate inside. Each schema fix was a small Edit. Each live run was a confirmation step. The plan was the substrate; the actual refactor happened against it. That's the value of plan-mode even when you can't predict the surface accurately.
+
+---
+
+*Next curriculum touch: Session 6 — likely a lesson about web UI smoke testing for agent pipelines (different shape: not refactor, integration verification).*

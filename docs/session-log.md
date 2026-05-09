@@ -353,3 +353,99 @@ ARCHITECT reads first, in order:
 **Session 5 hard stop:** TASK-101 through TASK-112. Don't expand into Session 6 work.
 
 ---
+
+## Session 5 — 2026-05-08
+
+**ARCHITECT's stated goal:** Schema refactor + Anthropic Claude end-to-end. Implement the plan-mode plan from `~/.claude/plans/federated-booping-globe.md`. Replace Gemini with Anthropic across the pipeline. Validate Agents 1-6 live on Anthropic.
+
+**North Star connection:** Closes the parked-since-2026-04-09 state. Unblocks ODIN's path to public — the magic moment requires the full 6-agent live run, which has been blocked by the Gemini quota issue. Session 5 was the gating dependency for everything Session 6+.
+
+### What We Did
+
+- Plan-mode investigation via 2 parallel Explore agents — cataloged Zod schema surface and pipeline/test integration points before refactor.
+- Authored implementation plan; user approved via ExitPlanMode.
+- Executed schema refactor through 5 progressive Anthropic-incompatibility discoveries:
+  - Round 1: `z.record(z.string(), z.any())` → `.passthrough()` shapes (5 instances)
+  - Round 2: `z.number().min(1).max(10)` range constraints removed (Anthropic rejects minimum/maximum)
+  - Round 3: `z.any()` / `z.unknown()` → `z.object({}).passthrough()` (6 instances)
+  - Round 4: Agent 3's 24-optional-parameter cap on tool-use grammar — initially reshaped to required fields with sentinel-value semantics
+  - Round 5: Agent 3's grammar-too-large ceiling — pivoted architecture to manual JSON parsing (bypasses ALL Anthropic structured-output limits)
+- Pipeline.ts refactor: provider import (`@ai-sdk/google` → `@ai-sdk/anthropic`), model selection (initial Haiku/Sonnet tier → all-Sonnet after Haiku failed on larger inputs), retry logic (Flash↔Pro fallback → 3-attempt exponential backoff on transient + JSON-shape errors), Output mode (`Output.object` → manual JSON parse + `stripNulls()` preprocessor + post-hoc Zod `safeParse`).
+- Defensive type coercion across schemas: `z.number()` → `z.coerce.number()`, `z.boolean()` → `z.coerce.boolean()` globally; metadata numerics use `.or(z.string())` to handle Claude's descriptive ranges ("40-80 hours").
+- Test surface updated: live-pipeline.test.ts comments + describe titles, regression.e2e.test.ts env-var bridge removed.
+- Created `odin-app/.env.example` (was missing); updated `.gitignore` to allow `.env.example` through the `.env*` pattern.
+- Live validation across Scenarios 1 and 4: H1, H2, H3, H4 all PASS on Anthropic Sonnet 4.6. Agents 5-6 untested live — blocked on Anthropic API credit balance, not code.
+- Decision flag flow extensively exercised live (6+ `decision_required` events resolved cleanly through async resolver pattern).
+- `state.md` rewritten with current live-validation status. `BGC:ODIN/CLAUDE.md` rewritten for Anthropic lock + manual-parse architecture.
+- `npm uninstall @ai-sdk/google` — TASK-110 done.
+- Committed BGC-ODIN parent repo (commit `bbefe3f`); commit reached GitHub.
+- Discovered Decision 016 — odin-app inner repo points at archived `EggmanPDX/ODIN` (from Decision 006), so the actual code commit is locally preserved on `feat/pipeline-runner` branch but blocked from pushing. Structural fix deferred to Session 6.
+
+### What We Built / Decided / Published
+
+- [x] 5 Anthropic schema-incompatibility classes resolved
+- [x] Pipeline architecture migrated to manual JSON parse (industry-standard, future-proof against further Anthropic structured-output limits)
+- [x] Agents 1-4 live-validated on Anthropic Sonnet 4.6, schema H1-H4 PASS
+- [x] Decision flag UX proven live across multiple scenarios
+- [x] Mock + schema-validator tests: 18/18 passing throughout
+- [x] `BGC:ODIN/state.md` and `BGC:ODIN/CLAUDE.md` rewritten
+- [x] Decision 016 logged (odin-app structural deferred)
+- [ ] Agents 5-6 live validation — Session 6 (after Anthropic billing top-up)
+- [ ] odin-app push to canonical remote — Session 6 (Decision 016)
+
+### What Didn't Work
+
+- **The Phase 1 catalog underestimated Anthropic incompatibilities by 4 classes.** Plan-mode's Explore agents flagged `z.record` as the only blocker. Reality: 5 distinct incompatibility classes surfaced across iterative live runs. Lesson: Anthropic's structured-output mode has constraints beyond the public docs (24-optional cap, grammar-size ceiling, propertyNames rejection, minimum/maximum on numbers, empty-schema rejection). Live testing IS the catalog — there is no static analysis substitute.
+- **Initial Haiku 4.5 / Sonnet 4.6 tiering failed on Agent 2.** Haiku produced `AI_NoOutputGeneratedError` on inputs >13KB where structured output discipline mattered. All-Sonnet was the right call; revisit tiering only post-MVP if cost matters.
+- **Time budget blew through.** Plan was ~2 hours; actual ~6 hours. Each iteration surfaced one new issue. The lesson: when refactoring against an external API's structured-output mode, time-box live iterations and have an architectural escape hatch ready (which is exactly what manual JSON parsing was).
+- **odin-app structural debt** — the inner repo's remote was never updated when ODIN was archived in Session 1 / Decision 006. Push attempt revealed it. Logged as Decision 016, deferred to Session 6.
+- **Pre-existing Agent 2 escalation pattern** — Agent 2 returns `handoff_status: 'escalated'` claiming "Agent 1 did not select a path" even when Agent 1 picked red_pill. Prompt-detection issue, not infrastructure. Session 6 prompt-engineering item.
+
+### Open Loops
+
+1. **Anthropic API credit balance** — top up to validate Agents 5-6 live (expected ~$20-50 for ~30 dev runs).
+2. **odin-app structural fix** (Decision 016) — pick Option A/B/C at Session 6 start.
+3. **Agent 2 escalation prompt-detection bug** — surfaced multiple times in live testing. Session 6 prompt fix.
+4. **Output shape drift between Anthropic and the original Gemini outputs** — no comparison run. Document drift in Session 6 if observed in regression scenarios.
+5. **Production-readiness of `z.coerce.*` patterns** — deferred since live mock + 4-agent live runs work. Watch for any data quality issues at higher agent counts.
+6. **Stripped null values may suppress legitimate `null` semantics** — currently we treat all nulls as "absent." If any field semantically uses null as a valid value (none currently), this will need reconsidering.
+
+### Curriculum Note
+
+**The plan was right. The reality was 5x bigger.**
+
+Plan-mode's Explore agents produced a thorough Phase 1 catalog. The plan was approved. The plan said: ~2 hours, primary refactor is `z.record` → `.passthrough()` shapes, low risk of "hidden Anthropic incompatibilities." It was wrong on every count except the architectural direction.
+
+What actually happened: 5 distinct Anthropic structured-output limits surfaced through 5 successive live test iterations. Each fix unblocked one agent and revealed the next. Round 5 (manual JSON parse) was the architectural escape hatch — once we adopted it, the remaining issues were Claude-output-drift handling, not infrastructure.
+
+The lesson is sharper than "plans are wrong." It's: **for any refactor that depends on an external API's structured-output mode, live testing IS the catalog, not the verifier.** Static analysis (even by a careful Explore agent) can't surface limits like "24-optional-parameter cap on tool-use grammar compilation" because they're implementation details, not public schema rules. The right move was to time-box static analysis (which we did) and have an architectural escape hatch ready (which we found in Round 5).
+
+When this gets taught: **"In a structured-output refactor, your plan-mode catalog will be wrong by ~5x. Build the escape hatch into the plan from day one."**
+
+The escape hatch in our case was manual JSON parsing — well-documented in Vercel AI SDK community examples, used by many production agent pipelines exactly because of these limits. Should have been Plan B in the original plan; instead became Round 5.
+
+Module 5 (Stack Decisions That Don't Age Out) sub-module candidate: **structured output vs. manual JSON parse — when each fits.**
+
+### Next Session Setup
+
+**Session 6 plan (per `BGC:ODIN/docs/product-roadmap.md`):**
+
+**Pre-flight (5 open-loop resolutions):**
+1. Resolve Decision 016 — pick A/B/C for odin-app structural fix.
+2. Top up Anthropic API credits.
+3. Confirm Agent 2 escalation as a Session 6 prompt-engineering task or defer.
+4. Validate Agents 5-6 live (Scenario 1 + Scenario 4 full pipeline).
+5. Document any output drift in state.md.
+
+**Then proceed with TASK-113 onwards:** Web UI smoke (home → /chat → /runs/[id]), Decision flag UI live exercise, /runs index page.
+
+ARCHITECT reads first, in order:
+1. `Road-to-Agentic-Excellence/CLAUDE.md`
+2. This session log
+3. `BGC:ODIN/state.md`
+4. `BGC:ODIN/docs/product-roadmap.md § Session 6`
+5. `~/.claude/plans/federated-booping-globe.md` (Session 5's plan, for retrospective context)
+
+**Hard stop for Session 6:** TASK-113 through TASK-120. Don't expand into Session 7 (cleanup) work.
+
+---
